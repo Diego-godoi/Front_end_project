@@ -14,54 +14,44 @@ import { USER_DETAIL_VIEW, USER_UPDATE_VIEW } from '@/constants/appConstants';
 
 
 const { fetchUsers, users, isLoading, isNetworkError, axiosError } = getUsers();
-const { handleUserTypeSelected, logoClicked } = useUserNavigation();
+const { logoClicked } = useUserNavigation();
 const userStore = useUserStore();
-const selectedUserId = ref(0);
+const selectedUserId = ref("");
 const isDeleteDialogSelected = ref(false);
 const selectedUserEmail = ref('');
 
 
 onMounted(() => {
-    fetchUsers(userStore.selectedUserType);
+    fetchUsers();
 });
 
-watch(() => userStore.selectedUserType, (newType) => {
-    fetchUsers(newType);
-});
-
-watchEffect(() => {
-    fetchUsers(userStore.selectedUserType);
-});
-
-
-const openDeleteDialog = (user: { id: number, email: string }) => {
+const openDeleteDialog = (user: { id: string, email: string }) => {
     selectedUserId.value = user.id;
     selectedUserEmail.value = user.email;
     isDeleteDialogSelected.value = true;
 };
 
-const handleCardClicked = (id: number) => {
-    router.push({ name: USER_DETAIL_VIEW, params: { id: id.toString() } }).then();
+const handleCardClicked = (id: string) => {
+    router.push({ name: USER_DETAIL_VIEW, params: { id } }).then();
 };
 
 const navigateToUserUpdateView = (user: UserFetchResponse) => {
     userStore.setUserToEdit(user);
-    router.push({ name: USER_UPDATE_VIEW, params: { id: user.id.toString() } }).then();
+    router.push({ name: USER_UPDATE_VIEW, params: { id: user.id } }).then();
 };
 
-const deleteUser = (id: number) => {
+const deleteUser = (id: string) => {
     console.log("delete clicked");
 };
 
 </script>
 
 <template>
-    <Navbar @user-type-selected="handleUserTypeSelected" @logo-clicked="logoClicked">
-        <MainBackground>
-            <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError ?? undefined"></ErrorDialog>
-            <UserCard :users="users" @card-clicked="handleCardClicked" @delete-clicked="openDeleteDialog"
-                @edit-clicked="navigateToUserUpdateView"></UserCard>
-            <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
-        </MainBackground>
-    </Navbar>
+    <Navbar @logo-clicked="logoClicked" />
+    <MainBackground>
+        <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError ?? undefined"></ErrorDialog>
+        <UserCard :users="users" @card-clicked="handleCardClicked" @delete-clicked="openDeleteDialog"
+            @edit-clicked="navigateToUserUpdateView"></UserCard>
+        <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
+    </MainBackground>
 </template>

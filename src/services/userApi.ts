@@ -23,21 +23,21 @@ api.interceptors.response.use(
 );
 
 interface UserService {
-    getUsers: (status: string) => Promise<AxiosResponse>;
+    getUsers: () => Promise<AxiosResponse>;
     createUser: (data: CreateUserRequest) => Promise<AxiosResponse>;
-    deleteUser: (id: number) => Promise<AxiosResponse>;
+    deleteUser: (id: string) => Promise<AxiosResponse>;
     updateUser: (data: UpdateUserRequest) => Promise<AxiosResponse>;
 }
 
 export const userService: UserService = {
-    getUsers(status: string) {
+    getUsers() {
         return api.get('/users');
     },
     createUser(data: CreateUserRequest) {
         return api.post('/users', data)
     },
-    deleteUser(id: number) {
-        return api.delete(`/users/&{id}`)
+    deleteUser(id: string) {
+        return api.delete(`/users/${id}`)
     },
     updateUser(data: UpdateUserRequest) {
         return api.put('/users', data)

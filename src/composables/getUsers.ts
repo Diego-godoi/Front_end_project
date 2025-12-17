@@ -5,7 +5,7 @@ import logRequestError from "./logRequestError";
 import { ref, type Ref } from "vue";
 
 interface UsersFetchState {
-    fetchUsers: (userType: string) => Promise<void>;
+    fetchUsers: () => Promise<void>;
     users: Ref<UserFetchResponse[]>;
     isLoading: Ref<boolean>;
     isNetworkError: Ref<boolean>;
@@ -18,12 +18,12 @@ export function getUsers(): UsersFetchState {
     const isNetworkError = ref(false);
     const axiosError = ref<AxiosError | null>(null);
 
-    async function fetchUsers(userType: string): Promise<void> {
+    async function fetchUsers(): Promise<void> {
         isLoading.value = true;
         users.value = [];
 
         try {
-            const response = await userService.getUsers(userType);
+            const response = await userService.getUsers();
             users.value = response.data;
             isNetworkError.value = false;
         } catch (err: unknown) {
