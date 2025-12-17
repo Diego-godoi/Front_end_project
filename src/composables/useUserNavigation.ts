@@ -25,12 +25,12 @@ export function useUserNavigation() {
         router.replace({ name: HOME_VIEW }).then();
     };
 
-    const logClicked = (): void => {
+    const logoClicked = (): void => {
         userStore.selectedUserType = UserState[UserState.OPEN];
         router.replace({ name: HOME_VIEW }).then();
     };
 
     return {
-        handleUserTypeSelected, navigateToUserView, logClicked,
+        handleUserTypeSelected, navigateToUserView, logoClicked,
     };
 }

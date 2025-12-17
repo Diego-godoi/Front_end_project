@@ -1,3 +1,5 @@
+import { HOME_VIEW, USER_CREATE_VIEW, USER_DETAIL_VIEW, USER_UPDATE_VIEW } from "@/constants/appConstants";
+import UsersOverviewPage from "@/pages/UsersOverviewPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -7,12 +9,12 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'home',
-        component: () => import('@/pages/index.vue'),
-        props: true
+        name: HOME_VIEW,
+        component: UsersOverviewPage,
       },
+
     ],
-  }
+  },
 ]
 
 const router = createRouter({

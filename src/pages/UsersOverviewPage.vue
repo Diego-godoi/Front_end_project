@@ -4,6 +4,12 @@ import { useUserNavigation } from '@/composables/useUserNavigation';
 import type { UserFetchResponse } from '@/dtos/userDtos';
 import router from '@/router';
 import { useUserStore } from '@/stores/userStore';
+import UserCard from "@/components/UserCard.vue";
+import MainBackground from '@/components/MainBackground.vue';
+import Navbar from '@/components/Navbar.vue';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
+import ErrorDialog from '@/components/ErrorDialog.vue';
+import { USER_DETAIL_VIEW, USER_UPDATE_VIEW } from '@/constants/appConstants';
 
 
 
@@ -35,12 +41,12 @@ const openDeleteDialog = (user: { id: number, email: string }) => {
 };
 
 const handleCardClicked = (id: number) => {
-    router.push({ name: TASK_DETAIL_VIEW, params: { id: id.toString() } }).then();
+    router.push({ name: USER_DETAIL_VIEW, params: { id: id.toString() } }).then();
 };
 
 const navigateToUserUpdateView = (user: UserFetchResponse) => {
     userStore.setUserToEdit(user);
-    router.push({ name: TASK_UPDATE_VIEW, params: { id: user.id.toString() } }).then();
+    router.push({ name: USER_UPDATE_VIEW, params: { id: user.id.toString() } }).then();
 };
 
 const deleteUser = (id: number) => {
@@ -48,3 +54,14 @@ const deleteUser = (id: number) => {
 };
 
 </script>
+
+<template>
+    <Navbar @user-type-selected="handleUserTypeSelected" @logo-clicked="logoClicked">
+        <MainBackground>
+            <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError ?? undefined"></ErrorDialog>
+            <UserCard :users="users" @card-clicked="handleCardClicked" @delete-clicked="openDeleteDialog"
+                @edit-clicked="navigateToUserUpdateView"></UserCard>
+            <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
+        </MainBackground>
+    </Navbar>
+</template>

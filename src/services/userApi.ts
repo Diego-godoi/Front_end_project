@@ -3,26 +3,26 @@ import type { CreateUserRequest, UpdateUserRequest } from "@/dtos/userDtos";
 import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from "axios";
 
 const baseURL = 'http://localhost:8080';
-const api: AxiosInstance = axios.create({baseURL})
+const api: AxiosInstance = axios.create({ baseURL })
 
 api.interceptors.response.use(
     (response: AxiosResponse) => response,
-    (error: AxiosError)=>{
-        if(error.response){
-            const {status} = error.response;
-            if (status === HTTP_STATUS.BAD_REQUEST){
+    (error: AxiosError) => {
+        if (error.response) {
+            const { status } = error.response;
+            if (status === HTTP_STATUS.BAD_REQUEST) {
                 console.error("Bad Request: ", error.response.data);
-            }else if (status===HTTP_STATUS.INTERNAL_SERVER_ERROR){
+            } else if (status === HTTP_STATUS.INTERNAL_SERVER_ERROR) {
                 console.error("INternal Server Error: ", error.response.data);
             }
-        }else{
+        } else {
             console.error("Error: ", error.message)
         }
         return Promise.reject(error);
     }
 );
 
-interface UserService{
+interface UserService {
     getUsers: (status: string) => Promise<AxiosResponse>;
     createUser: (data: CreateUserRequest) => Promise<AxiosResponse>;
     deleteUser: (id: number) => Promise<AxiosResponse>;
@@ -30,16 +30,16 @@ interface UserService{
 }
 
 export const userService: UserService = {
-    getUsers(status: string){
+    getUsers(status: string) {
         return api.get('/users');
     },
-    createUser(data: CreateUserRequest){
+    createUser(data: CreateUserRequest) {
         return api.post('/users', data)
     },
-    deleteUser(id: number){
+    deleteUser(id: number) {
         return api.delete(`/users/&{id}`)
     },
-    updateUser(data: UpdateUserRequest){
+    updateUser(data: UpdateUserRequest) {
         return api.put('/users', data)
     }
 

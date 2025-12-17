@@ -8,9 +8,16 @@
  */
 
 export const formatDate = (
-    date: string,
+    date: string | null | undefined,
     locale: string = 'en-US',
-    options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' }): string => {
+    options: Intl.DateTimeFormatOptions = {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+
+    }
+): string => {
+    if (!date) {
+        return 'N/A'
+    }
     const parsedDate = new Date(date);
     if (isNaN(parsedDate.getTime())) {
         console.warn('formattedDate: Invalid date provided');
