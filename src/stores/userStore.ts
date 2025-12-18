@@ -1,10 +1,13 @@
 import { defineStore } from "pinia";
 import type { UserFetchResponse } from "@/dtos/userDtos";
 
+interface UserState {
+    userToEdit: UserFetchResponse | null
+}
 
 export const useUserStore = defineStore('user', {
-    state: () => ({
-        userToEdit: Object as UserFetchResponse | unknown,
+    state: (): UserState => ({
+        userToEdit: null,
     }),
     actions: {
         setUserToEdit(user: UserFetchResponse) {

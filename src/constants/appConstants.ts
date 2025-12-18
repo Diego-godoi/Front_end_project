@@ -23,4 +23,6 @@ export const USER_CREATE_VIEW = 'UserCreate';
 
 export const USER_UPDATE_VIEW = 'UserUpdate';
 
-export const MIN_USER_DESCRIPTION = 3;
+export const MIN_USER_PASSWORD = 5;
+
+export const MIN_USER_NAME = 5;

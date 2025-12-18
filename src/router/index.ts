@@ -1,5 +1,8 @@
 import { HOME_VIEW, USER_CREATE_VIEW, USER_DETAIL_VIEW, USER_UPDATE_VIEW } from "@/constants/appConstants";
+import UserCreatePage from "@/pages/UserCreatePage.vue";
+import UserDetailsPage from "@/pages/UserDetailsPage.vue";
 import UsersOverviewPage from "@/pages/UsersOverviewPage.vue";
+import UserUpdatePage from "@/pages/UserUpdatePage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
@@ -11,21 +14,25 @@ const routes = [
         path: '',
         name: HOME_VIEW,
         component: UsersOverviewPage,
+        props: true
       },
       {
-        path: '/user/create',
+        path: 'new-user',
         name: USER_CREATE_VIEW,
-        component: () => import('@/pages/UserCreatePage.vue'),
+        component: UserCreatePage,
+        props: true
       },
       {
-        path: '/user/:id',
+        path: 'user/:id',
         name: USER_DETAIL_VIEW,
-        component: () => import('@/pages/UserDetailPage.vue'),
+        component: UserDetailsPage,
+        props: true,
       },
       {
-        path: '/user/:id/edit',
+        path: 'edit/:id',
         name: USER_UPDATE_VIEW,
-        component: () => import('@/pages/UserUpdatePage.vue'),
+        component: UserUpdatePage,
+        props: true
       }
 
     ],
