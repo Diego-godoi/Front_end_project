@@ -36,6 +36,6 @@ const updateUser = (request: UpdateUserRequest) => {
     <MainBackground>
         <UserUpdateForm @update-user="updateUser" @abort-clicked="clickedAbort" />
         <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
-        <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError"></ErrorDialog>
+        <ErrorDialog :model-value="isNetworkError && !!axiosError" :axios-error="axiosError"></ErrorDialog>
     </MainBackground>
 </template>

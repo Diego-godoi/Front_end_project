@@ -11,15 +11,18 @@ const isLoading = ref(false);
 const isNetworkError = ref(false);
 const axiosError = ref<AxiosError>();
 
+const createForm = ref<InstanceType<typeof UserCreateForm>>()
+
 const createUser = (request: CreateUserRequest) => {
     generateUser(request, isLoading, isNetworkError, axiosError);
+    createForm?.value?.resetForm()
 }
 </script>
 
 <template>
     <Navbar @logo-clicked="logoClicked"></Navbar>
     <MainBackground>
-        <UserCreateForm @create-new-user="createUser"></UserCreateForm>
+        <UserCreateForm ref="createForm" @create-new-user="createUser"></UserCreateForm>
         <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
         <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError"></ErrorDialog>
     </MainBackground>

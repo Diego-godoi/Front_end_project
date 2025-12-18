@@ -10,20 +10,22 @@ export async function editUser(request: UpdateUserRequest,
     axiosError: Ref<AxiosError | unknown>,
     navigateToUserView: () => void): Promise<void> {
 
+    isLoading.value = true;
+    isNetworkError.value = false;
+    axiosError.value = undefined
 
-    isLoading.value = true
-    isNetworkError.value = false
-    await userService.updateUser(request)
-        .then(() => {
-            isLoading.value = false
-            navigateToUserView();
-        })
-        .catch((err: AxiosError | unknown) => {
-            logRequestError('updateUser', err)
-            axiosError.value = err instanceof AxiosError ? err : undefined
-            isNetworkError.value = true;
-        })
-        .finally(() => {
-            isLoading.value = false;
-        })
+    try {
+        await userService.updateUser(request);
+        navigateToUserView();
+
+    } catch (err: AxiosError | unknown) {
+        logRequestError('updateUser', err);
+
+        axiosError.value = err instanceof AxiosError ? err : undefined;
+
+        isNetworkError.value = true;
+
+    } finally {
+        isLoading.value = false;
+    }
 }

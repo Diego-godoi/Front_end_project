@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { formatDate } from '@/composables/formatDate';
 import type { UserFetchResponse } from '@/dtos/userDtos';
 import { useUserStore } from '@/stores/userStore';
 

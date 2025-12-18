@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MIN_USER_NAME, MIN_USER_PASSWORD } from '@/constants/appConstants'
+import { createUserSchema } from '@/composables/userValidation';
 import type { CreateUserRequest } from '@/dtos/userDtos'
 import { useField, useForm } from 'vee-validate'
 
@@ -8,20 +8,7 @@ const emit = defineEmits<{
 }>()
 
 const { handleSubmit, handleReset } = useForm<CreateUserRequest>({
-    validationSchema: {
-        name(value: string) {
-            if (value?.length >= MIN_USER_NAME) return true
-            return 'Name needs to be at least 5 characters'
-        },
-        email(value: string) {
-            if (value?.includes('@')) return true
-            return 'Email addresses must include the @ symbol'
-        },
-        password(value: string) {
-            if (value?.length >= MIN_USER_PASSWORD) return true
-            return 'Password needs to be at least 5 characters.'
-        },
-    },
+    validationSchema: createUserSchema
 })
 
 const email = useField<string>('email')
@@ -30,6 +17,10 @@ const password = useField<string>('password')
 
 const submit = handleSubmit((values) => {
     emit('create-new-user', values)
+})
+
+defineExpose({
+    resetForm: handleReset
 })
 </script>
 

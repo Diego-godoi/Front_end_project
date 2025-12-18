@@ -1,62 +1,55 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { MIN_USER_NAME, MIN_USER_PASSWORD } from '@/constants/appConstants'
-import type { UpdateUserRequest } from '@/dtos/userDtos'
-import { useUserStore } from '@/stores/userStore'
-import { useField } from 'vee-validate'
+import { watchEffect } from "vue";
+import type { UpdateUserRequest } from "@/dtos/userDtos";
+import { useUserStore } from "@/stores/userStore";
+import { useField, useForm } from "vee-validate";
+import { editUserSchema } from "@/composables/userValidation";
 
-const userStore = useUserStore()
-
-if (!userStore.userToEdit) {
-    throw new Error('User to edit not found')
-}
-
-const user = userStore.userToEdit
-const request = reactive<UpdateUserRequest>({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    password: '',
-})
-
-const name = useField<string>('name')
-const email = useField<string>('email')
-const password = useField<string>('password')
+const userStore = useUserStore();
 
 const emit = defineEmits<{
-    (e: 'update-user', payload: UpdateUserRequest): void
-    (e: 'abort-clicked'): void
-}>()
+    (e: "update-user", payload: UpdateUserRequest): void;
+    (e: "abort-clicked"): void;
+}>();
 
-const handleSubmit = () => {
-    if ((request.name?.length ?? 0) < MIN_USER_NAME) {
-        name.errorMessage.value = 'Name needs to be at least 3 characters'
-        return
-    }
-    if ((request.email?.length ?? 0) < MIN_USER_NAME) {
-        email.errorMessage.value = 'Name needs to be at least 3 characters'
-        return
-    }
-    if ((request.password?.length ?? 0) < MIN_USER_PASSWORD) {
-        password.errorMessage.value = 'Password needs to be at least  characters'
-        return
-    }
+const { handleSubmit, setValues } = useForm<UpdateUserRequest>({
+    validationSchema: editUserSchema,
+});
 
-    emit('update-user', request)
-}
+const { value: name, errorMessage: nameError } = useField<string>("name");
+const { value: email, errorMessage: emailError } = useField<string>("email");
+const { value: password, errorMessage: passwordError } = useField<string>("password");
+
+const submit = handleSubmit((values) => {
+    emit("update-user", values);
+});
 
 const handleReset = () => {
-    emit('abort-clicked')
-}
+    emit("abort-clicked");
+};
+
+watchEffect(() => {
+    if (userStore.userToEdit) {
+        setValues({
+            id: userStore.userToEdit.id,
+            name: userStore.userToEdit.name,
+            email: userStore.userToEdit.email,
+            password: '',
+        });
+    }
+});
 </script>
 
 <template>
-    <form @submit.prevent="handleSubmit">
-        <v-text-field v-model="request.name" :counter="100" :error-messages="name.errorMessage.value"
-            label="Name"></v-text-field>
-        <v-text-field v-model="request.email" :counter="100" :error-messages="email.errorMessage.value"
-            label="Name"></v-text-field>
-        <v-text-field v-model="request.password" :counter="100" :error-messages="password.errorMessage.value"
-            label="Name"></v-text-field>
+    <form @submit.prevent="submit">
+        <v-text-field v-model="name" :counter="100" :error-messages="nameError" label="Name"></v-text-field>
+
+        <v-text-field v-model="email" :counter="100" :error-messages="emailError" label="email"></v-text-field>
+
+        <v-text-field v-model="password" :counter="100" :error-messages="passwordError" label="Password"></v-text-field>
+
+        <v-btn class="mb-4 clear-btn" @click="handleReset">abort</v-btn>
+
+        <v-btn class="mb-4 submit-btn" type="submit">update</v-btn>
     </form>
 </template>

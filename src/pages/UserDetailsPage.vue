@@ -8,6 +8,7 @@ import UserDetailsCard from '@/components/UserDetailsCard.vue';
 defineProps({
     id: String
 });
+
 const user = reactive<UserFetchResponse>({
     id: '',
     name: '',
@@ -19,6 +20,7 @@ const { logoClicked } = useUserNavigation();
 const userStore = useUserStore();
 
 onMounted(showUserDetails);
+
 function showUserDetails() {
     Object.assign(user, userStore.userToEdit)
 }
