@@ -4,12 +4,15 @@
   "type": "module",
   "version": "0.0.0",
   "scripts": {
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@fontsource/roboto": "5.2.7",
