@@ -10,6 +10,8 @@ import Navbar from '@/components/Navbar.vue';
 import LoadingSpinner from '@/components/LoadingSpinner.vue';
 import ErrorDialog from '@/components/ErrorDialog.vue';
 import { USER_DETAIL_VIEW, USER_UPDATE_VIEW } from '@/constants/appConstants';
+import { removeUser } from '@/composables/removeUser'
+import UserDeleteDialog from '@/components/UserDeleteDialog.vue';
 
 
 
@@ -18,16 +20,16 @@ const { logoClicked } = useUserNavigation();
 const userStore = useUserStore();
 const selectedUserId = ref("");
 const isDeleteDialogSelected = ref(false);
-const selectedUserEmail = ref('');
+const selectedUserName = ref('');
 
 
 onMounted(() => {
     fetchUsers();
 });
 
-const openDeleteDialog = (user: { id: string, email: string }) => {
+const openDeleteDialog = (user: { id: string, name: string }) => {
     selectedUserId.value = user.id;
-    selectedUserEmail.value = user.email;
+    selectedUserName.value = user.name
     isDeleteDialogSelected.value = true;
 };
 
@@ -41,7 +43,7 @@ const navigateToUserUpdateView = (user: UserFetchResponse) => {
 };
 
 const deleteUser = (id: string) => {
-    console.log("delete clicked");
+    removeUser(id, isLoading, isNetworkError, axiosError, fetchUsers);
 };
 
 </script>
@@ -49,9 +51,13 @@ const deleteUser = (id: string) => {
 <template>
     <Navbar @logo-clicked="logoClicked" />
     <MainBackground>
-        <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError ?? undefined"></ErrorDialog>
+        <ErrorDialog :model-value="isNetworkError" :axios-error="axiosError ?? undefined" />
+
         <UserCard :users="users" @card-clicked="handleCardClicked" @delete-clicked="openDeleteDialog"
-            @edit-clicked="navigateToUserUpdateView"></UserCard>
-        <LoadingSpinner :is-loading="isLoading"></LoadingSpinner>
+            @edit-clicked="navigateToUserUpdateView" />
+
+        <UserDeleteDialog v-model="isDeleteDialogSelected" :userName="selectedUserName.valueOf()"
+            @confirm-delete="deleteUser(selectedUserId.valueOf())"></UserDeleteDialog>
+        <LoadingSpinner :is-loading="isLoading" />
     </MainBackground>
 </template>

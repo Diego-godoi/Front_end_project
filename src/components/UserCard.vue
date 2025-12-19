@@ -35,7 +35,7 @@ function storeUser(user: UserFetchResponse) {
                 </v-btn>
 
                 <v-btn color="red" class="ml-auto"
-                    @click="emits('delete-clicked', { id: user.id, description: user.email })">
+                    @click="emits('delete-clicked', { id: user.id, name: user.name })">
                     Delete User
                     <v-icon end icon="mdi-trash-can-outline"></v-icon>
                 </v-btn>
