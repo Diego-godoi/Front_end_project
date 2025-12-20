@@ -29,7 +29,7 @@ services:
   # Spring Boot API (imagem publicada)
   # ========================================
   api:
-    image: diegos01/cleanarch-api:latest
+    image: diegos01/clean-arch-api:latest
     container_name: cleanArch_api
     restart: unless-stopped
     depends_on:
